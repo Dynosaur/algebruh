@@ -19,7 +19,8 @@ app.get('*', (req, res) => {
             console.log('Response sent.');
             break;
         default:
-            res.sendStatus(404);
+            res.send('Not found.');
+            console.log('Send 404 status');
     }
 });
 
