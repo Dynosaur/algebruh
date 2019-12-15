@@ -5,6 +5,8 @@ const serverPort = 8080;
 
 const htmlFile = __dirname + '/dist/index.html';
 const scriptFile = __dirname + '/dist/bundle.js';
+const iconFile = __dirname + '/dist/favicon.ico';
+const styleFile = __dirname + '/dist/index.css';
 
 server.get('*', (req, res) => {
     console.log('Request incoming: "' + req.url + '"');
@@ -17,7 +19,18 @@ server.get('*', (req, res) => {
         res.sendFile(scriptFile);
         console.log('JavaScript file requested.\nSent /dist/bundle.js.\n');
         return;
-    } else {
+    }
+    if (req.url.endsWith('.ico')) {
+        res.sendFile(iconFile);
+        console.log('ICO file requested.\nSent /dist/favicon.ico.\n');
+        return;
+    }
+    if (req.url.endsWith('.css')) {
+        res.sendFile(styleFile);
+        console.log('CSS file requested.\nSent /dist/index.css.\n');
+        return;
+    }
+    else {
         res.sendFile(htmlFile);
         console.log('Unknown request. Sent index.html.\n');
     }
