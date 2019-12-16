@@ -1,6 +1,63 @@
+.alg-view-container {
+  margin: 25px;
+  border-radius: 25px;
+  background-color: white; }
+
 .alg-graph-canvas {
-  display: block; }
+  display: block;
+  width: 100%;
+  height: 100%; }
+
+.alg-graph-container {
+  display: block;
+  width: 100%;
+  height: 100%; }
 
 body {
-  margin: 0; }
+  margin: 0;
+  height: 100vh; }
+
+#root {
+  height: 100%;
+  background-color: #e0e0ff; }
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  float: none; }
+
+div {
+  overflow: hidden; }
+
+a {
+  color: black; }
+
+.alg-navbar-container {
+  border-bottom: 1px solid black;
+  background-color: white; }
+
+.alg-navbar-logo-img {
+  width: 80px;
+  height: 50px;
+  float: left; }
+
+.alg-navbar-sign-in {
+  float: right; }
+
+.alg-navbar-sign-in {
+  margin-top: auto;
+  margin-bottom: auto; }
+
+.alg-home-view {
+  text-align: center;
+  font-family: Arial;
+  background-color: white; }
+
+.alg-home-view-title {
+  margin-top: 12px;
+  margin-bottom: 24px;
+  font-size: 24px; }
+
+.alg-home-view-logo {
+  width: 80px;
+  height: 50px; }
 

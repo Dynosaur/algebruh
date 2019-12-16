@@ -1,3 +1,22 @@
 body {
     margin: 0;
+    height: 100vh;
+}
+
+#root {
+    height: 100%;
+    background-color: #e0e0ff;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    float: none;
+}
+
+div {
+    overflow: hidden;
+}
+
+a {
+    color: black;
 }
