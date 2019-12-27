@@ -1,19 +1,30 @@
 .alg-navbar-container {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
     border-bottom: 1px solid black;
     background-color: white;
+
+    .alg-navbar-logo-img {
+        display: block;
+        width: 150px;
+        height: 40px;
+    }
 }
 
-.alg-navbar-logo-img {
-    width: 80px;
-    height: 50px;
-    float: left;
-}
+.alg-navbar-link-container {
 
-.alg-navbar-sign-in {
-    float: right;
-}
+    display: flex;
 
-.alg-navbar-sign-in {
-    margin-top: auto;
-    margin-bottom: auto;
+    .alg-navbar-text {
+        margin-top: auto;
+        margin-bottom: auto;
+        font-size: 16px;
+    }
+
+    .alg-navbar-graph-anchor {
+        margin-right: 50px;
+    }
 }
