@@ -1,12 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import NotFound from './components/NotFound';
-import GraphPage from './views/GraphPage';
-import SignIn from './components/sign-in/';
-import BlankPage from './views/BlankPage';
-import './styles/global.scss';
+
 import HomePage from './views/HomePage';
+import SignIn from './components/sign-in/';
+import GraphPage from './views/GraphPage';
+import BlankPage from './views/BlankPage';
+import NotFound from './components/NotFound';
+
+import './global.scss';
 
 const frontEndRouter = (
     <Router>
