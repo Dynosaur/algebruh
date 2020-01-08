@@ -1,0 +1,11 @@
+.alg-graph-container {
+
+    display: flex;
+    flex: 1 0 auto;
+    width: 100%;
+
+    .alg-graph-canvas {
+        display: block;
+        width: 100%;
+    }
+}

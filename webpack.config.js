@@ -49,8 +49,13 @@ module.exports = {
             use: [
               'file-loader',
             ]
-          }
-        ]
+          },
+          {
+            test: /\.tsx?$/,
+            use: 'ts-loader',
+            exclude: /node_modules/,
+          },
+        ],
     },
     resolve: {
         extensions: ['.js', '.jsx', '.scss', 'css']

@@ -1,59 +1,79 @@
 import React, { Component } from 'react';
-import './style';
+import Point from './Point';
+import Canvas from './Canvas';
+
+import './Graph.scss';
+
+/**
+ * TODO
+ * ----
+ * - I don't like the implementation of Canvas.center
+ * - Find a way around the event handler bindings? They take up a lot of space in the constructor
+ */
 
 class Graph extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            canvasId: 'alg-graph-canvas-a',
-            containerId: 'alg-graph-container-a',
-            center: {
-                x: 0,
-                y: 0
-            },
-            zoom: 1
-        }
-        window.addEventListener('resize', () => this.drawBoxInCenter());
+        this.containerRef = React.createRef();
+        this.canvasRef = React.createRef();
+        this.canvas = undefined;
+
+        this.handleClick     =     this.handleClick.bind(this);
+        this.handleMouseDown = this.handleMouseDown.bind(this);
+        this.handleMouseUp   =   this.handleMouseUp.bind(this);
+        this.handleMouseMove = this.handleMouseMove.bind(this);
+        this.handleResize    =    this.handleResize.bind(this);
     }
 
     render() {
         return (
-            <div id={this.state.containerId} className='alg-graph-container'>
-                <canvas
-                    id={this.state.canvasId}
-                    className='alg-graph-canvas'
-                ></canvas>
+            <div ref={this.containerRef} className='alg-graph-container'>
+                <canvas ref={this.canvasRef} className='alg-graph-canvas'></canvas>
             </div>
         );
     }
 
     componentDidMount() {
-        this.drawBoxInCenter();
-        document.getElementById(this.state.canvasId).addEventListener('scroll', (e) => {
-            console.log(e);
-        });
+        const canvasDOM = this.canvasRef.current;
+        canvasDOM.addEventListener('click',     this.handleClick);
+        canvasDOM.addEventListener('mousedown', this.handleMouseDown);
+        canvasDOM.addEventListener('mouseup',   this.handleMouseUp);
+        window.addEventListener('resize',    this.handleResize);
+
+        const containerDOM = this.containerRef.current;
+        canvasDOM.width  = containerDOM.clientWidth;
+        canvasDOM.height = containerDOM.clientHeight;
+
+        this.canvas = new Canvas(this.canvasRef);
+        this.canvas.draw();
     }
 
-    handleScroll(e) {
-        console.log(e);
+    handleClick(ev) {
+        //const point = this.canvas.getPoint(ev.x, ev.y);
+        //console.log(point);
     }
 
-    drawBoxInCenter() {
-        var canvas = document.getElementById(this.state.canvasId);
-        var container = document.getElementById(this.state.containerId);
-        var ctx = canvas.getContext('2d');
+    handleResize() {
+        const canvas = this.canvasRef.current;
+        const container = this.containerRef.current;
         canvas.width = container.clientWidth;
         canvas.height = container.clientHeight;
-        var center = {
-            x: canvas.width / 2,
-            y: canvas.height / 2,
-        }
-        console.log(center);
-        ctx.strokeStyle = '#' + Math.random().toString(16).slice(2, 8);
-        ctx.beginPath();
-        ctx.arc(center.x, center.y+500, 50, 0, 2 * Math.PI);
-        ctx.stroke();
+        this.canvas.draw();
+    }
+
+    handleMouseDown() {
+        this.canvasRef.current.addEventListener('mousemove', this.handleMouseMove);
+    }
+
+    handleMouseUp() {
+        this.canvasRef.current.removeEventListener('mousemove', this.handleMouseMove);
+    }
+
+    handleMouseMove(ev) {
+        this.canvas.center = this.canvas.center.translate(ev.movementX, ev.movementY);
+        console.log(this.canvas.center);
+        this.canvas.draw();
     }
 
 }
