@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 
-import Container from '../../components/Container';
+import Page from '../../components/Page';
+
+import './BlankPage.scss';
 
 class BlankPage extends Component {
 
     render() {
         return (
-            <Container>
-                Blank Page
-        </Container>
-        )
+            <Page idName='alg-blank-view'>
+                Hello, World!
+            </Page>
+        );
     }
 }
 
