@@ -1,9 +1,11 @@
 import Point from './Point';
-import VirtualGraph from './VirtualGraph';
+import VirtualGraph from './virtualGraph';
 
 class Canvas {
 
-    constructor(ref) {
+    canvasRef: React.RefObject<HTMLInputElement>;
+
+    constructor(ref: React.RefObject<HTMLInputElement>) {
         this.canvasRef = ref;
         this.graph = new VirtualGraph();
         this.xScale = this.getWidth() / 10;
