@@ -1,6 +1,6 @@
-import Point from '../../../math/geometry/point';
-import VirtualGraph from '../virtual/virtualGraph';
-import Line from '../../../math/geometry/line';
+import VirtualGraph from "./virtualGraph";
+import Point from "../../math/geometry/point";
+import Line from "../../math/geometry/line";
 
 class Canvas {
 

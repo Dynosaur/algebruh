@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Canvas from './screen/canvas';
+import Canvas from './canvas';
 
 import './Graph.scss';
 

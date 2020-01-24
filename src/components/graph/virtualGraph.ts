@@ -1,6 +1,6 @@
-import Point from '../../../math/geometry/point';
-import Line from '../../../math/geometry/line';
-import Rectangle from '../../../math/geometry/rectangle';
+import Point from "../../math/geometry/point";
+import Rectangle from "../../math/geometry/rectangle";
+import Line from "../../math/geometry/line";
 
 class VirtualGraph {
 
