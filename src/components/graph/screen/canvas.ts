@@ -1,7 +1,5 @@
 import Point from '../../../math/geometry/point';
 import VirtualGraph from '../virtual/virtualGraph';
-import CanvasPoint from './canvasPoint';
-import CanvasLine from './canvasLine';
 import Line from '../../../math/geometry/line';
 
 class Canvas {
@@ -9,13 +7,13 @@ class Canvas {
     private graph: VirtualGraph;
     private xScale: number;
     private yScale: number;
-    private center: CanvasPoint;
+    private center: Point;
 
     constructor(private canvasRef: React.RefObject<HTMLCanvasElement>) {
         this.graph = new VirtualGraph(-10, 10, -10, 10);
         this.xScale = 0;
         this.yScale = 0;
-        this.center = new CanvasPoint(0, 0);
+        this.center = new Point(0, 0);
     }
 
     public handleDrag(x: number, y: number): void {
@@ -29,7 +27,7 @@ class Canvas {
     public initialize(): void {
         this.xScale = this.getWidth() / 10;
         this.yScale = this.getHeight() / 3;
-        this.center = new CanvasPoint(this.getWidth() / 2, this.getHeight() / 2);
+        this.center = new Point(this.getWidth() / 2, this.getHeight() / 2);
         console.log(this.transPoint(new Point(0, 10)));
     }
 
@@ -110,7 +108,7 @@ class Canvas {
         this.getContext().clearRect(0, 0, this.getWidth(), this.getHeight());
     }
 
-    drawLine(line: CanvasLine, context: CanvasRenderingContext2D) {
+    drawLine(line: Line, context: CanvasRenderingContext2D) {
         context.beginPath();
         context.moveTo(line.getStart().getX(), line.getStart().getY());
         context.lineTo(line.getEnd().getX(), line.getEnd().getY());
@@ -129,10 +127,10 @@ class Canvas {
             console.log(this.transLine(line));
             this.drawLine(this.transLine(line), context);
         });
-        // this.drawLine(this.center, new CanvasPoint(this.getWidth() / 2, 0), context);
-        // this.drawLine(this.center, new CanvasPoint(this.getWidth(), this.getHeight() / 2), context);
-        // this.drawLine(this.center, new CanvasPoint(0, this.getHeight() / 2), context);
-        // this.drawLine(this.center, new CanvasPoint(this.getWidth() / 2, this.getHeight()), context);
+        // this.drawLine(this.center, new Point(this.getWidth() / 2, 0), context);
+        // this.drawLine(this.center, new Point(this.getWidth(), this.getHeight() / 2), context);
+        // this.drawLine(this.center, new Point(0, this.getHeight() / 2), context);
+        // this.drawLine(this.center, new Point(this.getWidth() / 2, this.getHeight()), context);
         // context.strokeStyle = '#A0A0A0';
         // context.lineWidth = 1;
         // var viewLeftSide  = Math.ceil(-this.getWidth(0.5, 'virtual') - this.center.virtual.x);
