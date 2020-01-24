@@ -1,10 +1,18 @@
 class Point {
 
-    constructor(private x: number, private y: number) {}
+    constructor(protected x: number, protected y: number) {}
 
-    public translate(x: number, y: number) {
+    public move(x: number, y: number): void {
         this.x += x;
         this.y += y;
+    }
+
+    public translate(x: number, y: number): Point {
+        return new Point(this.x + x, this.y + y);
+    }
+
+    public distanceTo(point: Point): number {
+        return Math.sqrt(Math.pow(point.x - this.x, 2) + Math.pow(point.y - this.y, 2));
     }
 
     public getX(): number {
@@ -13,6 +21,10 @@ class Point {
 
     public getY(): number {
         return this.y;
+    }
+
+    public add(point: Point): Point {
+        return this.translate(point.x, point.y);
     }
 }
 
