@@ -1,0 +1,38 @@
+import Line  from '../../../../src/components/Graph/geometry/Line';
+import Point from '../../../../src/components/Graph/geometry/Point';
+
+test('Line.slope', () => {
+    expect(new Line(new Point(0, 0), new Point(1, 1)).slope).toBe(1);
+    expect(new Line(new Point(0, 0), new Point(1, 10)).slope).toBe(10);
+    expect(new Line(new Point(0, 10), new Point(1, 0)).slope).toBe(-10);
+});
+
+test('Line.intercept', () => {
+    expect(new Line(new Point(-2, 5), new Point(1, 10)).intercept).toBeCloseTo(8.3, 0.1);
+    expect(new Line(new Point(1, 10), new Point(-2, 5)).intercept).toBeCloseTo(8.3, 0.1);
+});
+
+import VirtualGraph from '../../../src/components/Graph/VirtualGraph';
+
+test('VirtualGraph.isVisible', () => {
+    const graph = new VirtualGraph();
+    expect(graph.isVisible(0, 0)).toBe(true);
+    expect(graph.isVisible(-5, 5)).toBe(true);
+    expect(graph.isVisible(-10, 0)).toBe(false);
+    expect(graph.isVisible(0, 10)).toBe(false);
+    expect(graph.isVisible(10, 0)).toBe(false);
+    expect(graph.isVisible(1.5, 9.9)).toBe(true);
+    expect(graph.isVisible(100, 0)).toBe(false);
+});
+
+test('VirtualGraph.isLineIntersect', () => {
+    const graph = new VirtualGraph();
+    expect(graph.isLineIntersect(0, 0, 5, 10, -5, 0, 5, 5)).toBe(true);
+});
+
+test('VirtualGraph.isLineVisible', () => {
+    const graph = new VirtualGraph();
+    expect(graph.isLineVisible(0, 0, 1, 1)).toBe(true);
+    expect(graph.isLineVisible(-15, 0, -9, 11)).toBe(true);
+    expect(graph.isLineVisible(-100, 90, -90, 100)).toBe(false);
+});

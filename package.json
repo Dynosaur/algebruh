@@ -1,0 +1,44 @@
+{
+  "name": "algebruh",
+  "version": "0.2.0",
+  "description": "",
+  "scripts": {
+    "test": "jest",
+    "build": "webpack --mode development",
+    "buildandrun": "npm run build && babel-node server.js",
+    "start": "nodemon --exec npm run buildandrun"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-router-dom": "^5.1.2",
+    "typescript": "^3.7.4"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.7.5",
+    "@babel/core": "^7.7.5",
+    "@babel/node": "^7.7.4",
+    "@babel/preset-env": "^7.7.6",
+    "@babel/preset-react": "^7.7.4",
+    "@types/jest": "^24.0.25",
+    "@types/react": "^16.9.17",
+    "@types/react-dom": "^16.9.4",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.4.1",
+    "file-loader": "^5.0.2",
+    "jest": "^24.9.0",
+    "mini-css-extract-plugin": "^0.8.2",
+    "node-sass": "^4.13.0",
+    "nodemon": "^2.0.2",
+    "sass-loader": "^8.0.0",
+    "style-loader": "^1.1.2",
+    "ts-jest": "^24.3.0",
+    "ts-loader": "^6.2.1",
+    "ts-node": "^8.6.1",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
+  }
+}
