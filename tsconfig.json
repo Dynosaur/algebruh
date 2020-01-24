@@ -5,8 +5,10 @@
             "es6",
             "dom"
         ],
+        "sourceMap": true,
         "outDir": "./typescript",
-        "allowJs": true
+        "allowJs": true,
+        "jsx":"react"
     },
     "include": [
         "./src/**/*"

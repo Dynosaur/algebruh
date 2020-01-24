@@ -70,5 +70,6 @@ module.exports = {
         path: __dirname + '/dist',
         filename: "bundle.js",
         publicPath: "/"
-    }
+    },
+    devtool: "source-map"
 };
