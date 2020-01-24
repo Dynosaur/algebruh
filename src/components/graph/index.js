@@ -1,3 +1,3 @@
-import Graph from './Graph.jsx';
+import Graph from './graph.tsx';
 
 export default Graph;
