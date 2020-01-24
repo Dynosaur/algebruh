@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import GraphToolBar from '../../components/GraphToolBar';
-import Graph        from '../../components/Graph';
+import Graph        from '../../components/graph';
 import Page         from '../../components/Page';
 
 import './GraphPage.scss';
