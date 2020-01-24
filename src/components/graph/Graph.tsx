@@ -1,23 +1,19 @@
-import React, { Component } from 'react';
-import Point from './Point';
-import Canvas from './Canvas';
+import * as React from 'react';
+import Canvas from './screen/canvas';
 
 import './Graph.scss';
 
-/**
- * TODO
- * ----
- * - I don't like the implementation of Canvas.center
- * - Find a way around the event handler bindings? They take up a lot of space in the constructor
- */
+class Graph extends React.Component {
 
-class Graph extends Component {
+    containerRef: React.RefObject<HTMLDivElement>;
+       canvasRef: React.RefObject<HTMLCanvasElement>;
+          canvas: Canvas;
 
-    constructor(props) {
+    constructor(props: any) {
         super(props);
         this.containerRef = React.createRef();
         this.canvasRef = React.createRef();
-        this.canvas = undefined;
+        this.canvas = new Canvas(this.canvasRef);
 
         this.handleClick     =     this.handleClick.bind(this);
         this.handleMouseDown = this.handleMouseDown.bind(this);
@@ -45,7 +41,7 @@ class Graph extends Component {
         canvasDOM.width  = containerDOM.clientWidth;
         canvasDOM.height = containerDOM.clientHeight;
 
-        this.canvas = new Canvas(this.canvasRef);
+        this.canvas.initialize();
         this.canvas.draw();
     }
 
@@ -59,6 +55,8 @@ class Graph extends Component {
         const container = this.containerRef.current;
         canvas.width = container.clientWidth;
         canvas.height = container.clientHeight;
+
+        this.canvas.handleResize();
         this.canvas.draw();
     }
 
@@ -70,9 +68,10 @@ class Graph extends Component {
         this.canvasRef.current.removeEventListener('mousemove', this.handleMouseMove);
     }
 
-    handleMouseMove(ev) {
-        this.canvas.center = this.canvas.center.translate(ev.movementX, ev.movementY);
-        console.log(this.canvas.center);
+    handleMouseMove(ev: MouseEvent) {
+        //this.canvas.center = this.canvas.center.translate(ev.movementX, ev.movementY);
+        //console.log(this.canvas.center);
+        this.canvas.handleDrag(ev.movementX, ev.movementY);
         this.canvas.draw();
     }
 
