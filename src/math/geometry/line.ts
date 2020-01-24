@@ -7,6 +7,9 @@ class Line {
     private A: number;
     private B: number;
     private C: number;
+    private length: number;
+    private deltaX: number;
+    private deltaY: number;
 
     constructor(private start: Point, private end: Point) {
         this.slope = (end.getY() - start.getY()) / (end.getX() - start.getX());
@@ -14,6 +17,9 @@ class Line {
         this.A = start.getY() - end.getY();
         this.B = this.end.getX() - this.start.getX();
         this.C = -(this.start.getX() * this.end.getY() - this.end.getX() * this.start.getY());
+        this.length = start.distanceTo(end);
+        this.deltaX = Math.abs(this.start.getX() - this.end.getX());
+        this.deltaY = Math.abs(this.start.getY() - this.end.getY());
     }
 
     public getY(x: number): number {
@@ -79,6 +85,18 @@ class Line {
 
     public getC(): number {
         return this.C;
+    }
+
+    public getDeltaX(): number {
+        return this.deltaX;
+    }
+
+    public getDeltaY(): number {
+        return this.deltaY;
+    }
+
+    public getMidpoint(): Point {
+        return new Point((this.start.getX() + this.end.getX()) / 2, (this.start.getY() + this.end.getY()) / 2);
     }
 
 }
