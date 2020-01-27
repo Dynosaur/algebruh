@@ -120,13 +120,15 @@ class Canvas {
         const xDiff = Math.floor(this.displacement.getX() / this.xScale);
         console.log(xDiff);
         for(let i = -xDiff * this.xScale; i < this.getWidth() - xDiff * this.xScale; i += this.xScale) {
+            let x = i + this.displacement.getX();
             this.drawLine(
                 new Line(
-                    new Point(i + this.displacement.getX(), this.getHeight()),
+                    new Point(x, this.getHeight()),
                     new Point(i + this.displacement.getX(), 0)
                 ),
                 context
             );
+            context.fillText('' + (x - this.displacement.getX()), x, this.center.getY());
         }
         const yDiff = Math.floor(this.displacement.getY() / this.yScale);
         for(let i = -yDiff * this.yScale; i < this.getHeight() - yDiff * this.yScale; i += this.yScale) {
