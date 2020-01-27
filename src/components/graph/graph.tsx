@@ -18,11 +18,12 @@ class Graph extends React.Component {
         this.handleClick     =     this.handleClick.bind(this);
         this.handleMouseDown = this.handleMouseDown.bind(this);
         this.handleMouseUp   =   this.handleMouseUp.bind(this);
-        this.handleMouseMove = this.handleMouseMove.bind(this);
+        this.handleMouseDrag = this.handleMouseDrag.bind(this);
         this.handleResize    =    this.handleResize.bind(this);
+        this.handleScroll    =    this.handleScroll.bind(this);
     }
 
-    render() {
+    render(): JSX.Element {
         return (
             <div ref={this.containerRef} className='alg-graph-container'>
                 <canvas ref={this.canvasRef} className='alg-graph-canvas'></canvas>
@@ -30,11 +31,12 @@ class Graph extends React.Component {
         );
     }
 
-    componentDidMount() {
+    componentDidMount(): void {
         const canvasDOM = this.canvasRef.current;
         canvasDOM.addEventListener('click',     this.handleClick);
         canvasDOM.addEventListener('mousedown', this.handleMouseDown);
         canvasDOM.addEventListener('mouseup',   this.handleMouseUp);
+        canvasDOM.addEventListener('wheel',    this.handleScroll);
         window.addEventListener('resize',    this.handleResize);
 
         const containerDOM = this.containerRef.current;
@@ -45,12 +47,12 @@ class Graph extends React.Component {
         this.canvas.draw();
     }
 
-    handleClick(ev) {
+    handleClick(ev: MouseEvent): void {
         //const point = this.canvas.getPoint(ev.x, ev.y);
         //console.log(point);
     }
 
-    handleResize() {
+    handleResize(): void {
         const canvas = this.canvasRef.current;
         const container = this.containerRef.current;
         canvas.width = container.clientWidth;
@@ -60,19 +62,22 @@ class Graph extends React.Component {
         this.canvas.draw();
     }
 
-    handleMouseDown() {
-        this.canvasRef.current.addEventListener('mousemove', this.handleMouseMove);
+    handleMouseDown(): void {
+        this.canvasRef.current.addEventListener('mousemove', this.handleMouseDrag);
     }
 
-    handleMouseUp() {
-        this.canvasRef.current.removeEventListener('mousemove', this.handleMouseMove);
+    handleMouseUp(): void {
+        this.canvasRef.current.removeEventListener('mousemove', this.handleMouseDrag);
     }
 
-    handleMouseMove(ev: MouseEvent) {
+    handleMouseDrag(ev: MouseEvent): void {
         //this.canvas.center = this.canvas.center.translate(ev.movementX, ev.movementY);
         //console.log(this.canvas.center);
-        this.canvas.handleDrag(ev.movementX, ev.movementY);
-        this.canvas.draw();
+        this.canvas.handleMouseDrag(ev.movementX, ev.movementY);
+    }
+
+    handleScroll(ev: WheelEvent): void {
+        this.canvas.handleScroll(-ev.deltaY);
     }
 
 }

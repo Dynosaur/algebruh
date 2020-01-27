@@ -8,27 +8,14 @@ class Canvas {
     private xScale: number;
     private yScale: number;
     private center: Point;
+    private displacement: Point;
 
     constructor(private canvasRef: React.RefObject<HTMLCanvasElement>) {
-        this.graph = new VirtualGraph(-10, 10, -10, 10);
+        this.graph = new VirtualGraph(-10, 10, -10, 10, this);
         this.xScale = 0;
         this.yScale = 0;
         this.center = new Point(0, 0);
-    }
-
-    public handleDrag(x: number, y: number): void {
-        this.graph.translate(x / this.xScale, -y / this.yScale);
-    }
-
-    public handleResize(): void {
-        this.initialize();
-    }
-
-    public initialize(): void {
-        this.xScale = this.getWidth() / 10;
-        this.yScale = this.getHeight() / 3;
-        this.center = new Point(this.getWidth() / 2, this.getHeight() / 2);
-        console.log(this.transPoint(new Point(0, 10)));
+        this.displacement = new Point(0, 0);
     }
 
     public getWidth(): number {
@@ -39,68 +26,63 @@ class Canvas {
         return this.canvasRef.current.height;
     }
 
-    public getClientWidth(): number {
-        return this.canvasRef.current.clientWidth;
+    public getXScale(): number {
+        return this.xScale;
     }
 
-    public getClientHeight(): number {
-        return this.canvasRef.current.clientHeight;
+    public getYScale(): number {
+        return this.yScale;
     }
 
-    // getPoint(x, y, mode) {
-    //     return new Point(x, y, this, mode);
-    // }
+    public getCenter(): Point {
+        return this.center;
+    }
 
-    // getPointRef(x, y, mode) {
-    //     if (!mode) {
-    //         throw 'No mode argument provided.';
-    //     }
-    //     if (mode === 'screen') {
-    //         return new Point(x + this.center.graph.x, y + this.center.graph.y, this, mode);
-    //     }
-    //     if (mode === 'graph') {
-    //         return new Point(x, y, this, mode);
-    //     }
-    //     const point = new Point(x, y, this, mode);
-    // }
-
-    getContext() {
+    private getContext(): CanvasRenderingContext2D {
         return this.canvasRef.current.getContext('2d');
     }
 
-    // getWidth(scale, mode) {
-    //     if (!scale) {
-    //         scale = 0.5;
-    //     }
-
-    //     var width = this.canvasRef.current.width * scale;
-
-    //     if (mode === 'virtual') {
-    //         return width / this.xScale;
-    //     } else {
-    //         return width;
-    //     }
-    // }
-
-    // getHeight(scale, mode) {
-    //     if (!scale) {
-    //         scale = 0.5;
-    //     }
-
-    //     var height = this.canvasRef.current.height * scale;
-
-    //     if (mode === 'virtual') {
-    //         return height / this.yScale;
-    //     } else {
-    //         return height;
-    //     }
-    // }
-
-    private transPoint(point: Point): Point {
-        return new Point(point.getX() * this.xScale + this.center.getX(), -point.getY() * this.yScale + this.center.getY());
+    public handleMouseDrag(x: number, y: number): void {
+        this.center.move(x, y);
+        this.displacement.move(x, y);
+        this.graph.translate(-x/this.xScale, y/this.yScale);
+        this.draw();
     }
 
-    private transLine(line: Line): Line {
+    public handleResize(): void {
+        this.initialize();
+    }
+
+    public handleScroll(deltaY: number): void {
+        if (deltaY < 0) {
+            this.xScale /= 2;
+            this.yScale /= 2;
+        } else {
+            this.xScale *= 2;
+            this.yScale *= 2;
+        }
+        this.draw();
+    }
+
+    public initialize(): void {
+        this.xScale = this.getWidth() / 20;
+        this.yScale = this.getHeight() / 20;
+        this.center = new Point(this.getWidth() / 2, this.getHeight() / 2);
+    }
+
+    public transX(x: number): number {
+        return x * this.xScale + this.center.getX();
+    }
+
+    public transY(y: number): number {
+        return -y * this.yScale + this.center.getY();
+    }
+
+    public transPoint(point: Point): Point {
+        return new Point(this.transX(point.getX()), this.transY(point.getY()));
+    }
+
+    public transLine(line: Line): Line {
         return new Line(this.transPoint(line.getStart()), this.transPoint(line.getEnd()));
     }
 
@@ -116,65 +98,62 @@ class Canvas {
     }
 
     draw() {
+        console.log('New Frame');
         this.clear();
         this.drawGrid();
+
+        this.graph.draw().forEach(line => {
+            this.drawLine(this.transLine(line), this.getContext());
+        });
     }
 
     drawGrid() {
         const context = this.getContext();
 
-        this.graph.drawGrid().forEach(line => {
-            console.log(this.transLine(line));
-            this.drawLine(this.transLine(line), context);
-        });
-        // this.drawLine(this.center, new Point(this.getWidth() / 2, 0), context);
-        // this.drawLine(this.center, new Point(this.getWidth(), this.getHeight() / 2), context);
-        // this.drawLine(this.center, new Point(0, this.getHeight() / 2), context);
-        // this.drawLine(this.center, new Point(this.getWidth() / 2, this.getHeight()), context);
-        // context.strokeStyle = '#A0A0A0';
-        // context.lineWidth = 1;
-        // var viewLeftSide  = Math.ceil(-this.getWidth(0.5, 'virtual') - this.center.virtual.x);
-        // var viewRightSide = Math.ceil( this.getWidth(0.5, 'virtual') - this.center.virtual.x);
-        // for (var i = viewLeftSide; i <= viewRightSide; i++) {
-        //     this.drawLine(
-        //         this.getPoint(i + this.center.virtual.x, -this.getHeight(0.5, 'virtual'), 'virtual'),
-        //         this.getPoint(i + this.center.virtual.x, this.getHeight(0.5, 'virtual'), 'virtual'),
-        //         context
-        //     );
-        // }
+        // const Xrange = this.graph.getTopRight().getX() - this.graph.getTopLeft().getX();
+        // const Yrange = this.graph.getTopLeft().getY() - this.graph.getBottomRight().getY();
+        // console.log('xRange: ' + Xrange);
+        // console.log('yRange: ' + Yrange);
 
-        // var viewBottomSide = Math.ceil(-this.getHeight(0.5, 'virtual') - this.center.virtual.y);
-        // var viewTopSide    = Math.ceil( this.getHeight(0.5, 'virtual') - this.center.virtual.y);
-        // for (var i = viewBottomSide; i <= viewTopSide; i++) {
-        //     this.drawLine(
-        //         this.getPoint(-this.getWidth(0.5, 'virtual'), i + this.center.virtual.y, 'virtual'),
-        //         this.getPoint( this.getWidth(0.5, 'virtual'), i + this.center.virtual.y, 'virtual'),
-        //         context
-        //     );
-        // }
+        context.strokeStyle = '#aaa';
+        console.log(this.xScale);
+        const xDiff = Math.floor(this.displacement.getX() / this.xScale);
+        console.log(xDiff);
+        for(let i = -xDiff * this.xScale; i < this.getWidth() - xDiff * this.xScale; i += this.xScale) {
+            this.drawLine(
+                new Line(
+                    new Point(i + this.displacement.getX(), this.getHeight()),
+                    new Point(i + this.displacement.getX(), 0)
+                ),
+                context
+            );
+        }
+        const yDiff = Math.floor(this.displacement.getY() / this.yScale);
+        for(let i = -yDiff * this.yScale; i < this.getHeight() - yDiff * this.yScale; i += this.yScale) {
+            this.drawLine(
+                new Line(
+                    new Point(0, i + this.displacement.getY()),
+                    new Point(this.getWidth(), i + this.displacement.getY())
+                ),
+                context
+            );
+        }
 
-        // context.strokeStyle = '#000000';
-        // context.lineWidth = 2;
-        // this.drawLine(
-        //     this.center,
-        //     this.getPoint(this.getWidth() + this.center.graph.x, 0),
-        //     context
-        // );
-        // this.drawLine(
-        //     this.center,
-        //     this.getPoint(this.getWidth(), 0 + this.center.graph.y, 'graph'),
-        //     context
-        // );
-        // this.drawLine(
-        //     this.center,
-        //     this.getPoint(0 + this.center.graph.x, -this.getHeight(), 'graph'),
-        //     context
-        // );
-        // this.drawLine(
-        //     this.center,
-        //     this.getPoint(-this.getWidth(), 0 + this.center.graph.y, 'graph'),
-        //     context
-        // );
+        context.strokeStyle = '#000';
+        this.drawLine(
+            new Line(
+                new Point(this.getCenter().getX(), this.getHeight()),
+                new Point(this.getCenter().getX(), 0)
+            ),
+            context
+        );
+        this.drawLine(
+            new Line(
+                new Point(0, this.center.getY()),
+                new Point(this.getWidth(), this.center.getY())
+            ),
+            context
+        );
     }
 
 }
