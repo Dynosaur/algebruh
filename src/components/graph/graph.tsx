@@ -23,6 +23,10 @@ class Graph extends React.Component {
         this.handleScroll    =    this.handleScroll.bind(this);
     }
 
+    public getCanvas(): Canvas {
+        return this.canvas;
+    }
+
     render(): JSX.Element {
         return (
             <div ref={this.containerRef} className='alg-graph-container'>

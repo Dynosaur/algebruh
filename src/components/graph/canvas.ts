@@ -116,9 +116,7 @@ class Canvas {
         // console.log('yRange: ' + Yrange);
 
         context.strokeStyle = '#aaa';
-        console.log(this.xScale);
         const xDiff = Math.floor(this.displacement.getX() / this.xScale);
-        console.log(xDiff);
         for(let i = -xDiff * this.xScale; i < this.getWidth() - xDiff * this.xScale; i += this.xScale) {
             let x = i + this.displacement.getX();
             this.drawLine(
