@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import './NotFoundPage.scss';
+import './NotFoundPage';
 
 class NotFoundPage extends Component {
 
