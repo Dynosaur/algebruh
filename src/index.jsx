@@ -7,7 +7,7 @@ import HomePage     from './views/homePage';
 import NotFoundPage from './views/NotFoundPage';
 import SignInPage   from './views/signinPage';
 
-import './global.scss';
+import './global';
 
 const frontEndRouter = (
     <Router>
