@@ -1,49 +1,89 @@
 import * as React from 'react';
 
-import Canvas       from '../../components/canvas';
+import Button  from '../../components/button';
+import Canvas  from '../../components/canvas';
 import Toolbar from '../../components/toolbar';
-import Page         from '../../components/Page';
 
-import './GraphPage.scss';
+import './graph-page-style';
 
-class GraphPage extends React.Component {
+interface GraphProps {}
 
-    canvasRef: React.RefObject<HTMLCanvasElement>;
+interface GraphState {
+    width: number;
+    height: number;
+    mathFields: number;
+}
 
-    constructor(props: any) {
+class GraphPage extends React.Component<GraphProps, GraphState> {
+
+    private canvasContainerRef: React.RefObject<HTMLDivElement>;
+    private canvasRef: React.RefObject<HTMLCanvasElement>;
+
+    constructor(props: GraphProps) {
         super(props);
-        this.canvasRef = React.createRef<HTMLCanvasElement>();
+        this.canvasContainerRef = React.createRef();
+        this.canvasRef = React.createRef();
         this.state = {
-            gWidth: 0,
-            gHeight: 0
+            width: 0,
+            height: 0,
+            mathFields: 1
         };
+
+        this.handleContainerResize = this.handleContainerResize.bind(this);
+        this.handleToolbarButtonClick = this.handleToolbarButtonClick.bind(this);
     }
 
-    private getCanvas(): HTMLCanvasElement {
-        return this.canvasRef.current;
+    private setWidthHeight(): void {
+        const containerDOM = this.canvasContainerRef.current;
+        if (containerDOM == null) {
+            this.setState({
+                width: 0,
+                height: 0
+            });
+        } else {
+            this.setState({
+                width: containerDOM.clientWidth,
+                height: containerDOM.clientHeight
+            });
+        }
     }
 
-    private getWidth(): number {
-        return (this.getCanvas() == null) ? 0 : this.getCanvas().width;
-    }
+    public componentDidMount(): void {
+        this.setWidthHeight();
 
-    private getHeight(): number {
-        return (this.getCanvas() == null) ? 0 : this.getCanvas().height;
+        window.addEventListener('resize', this.handleContainerResize);
     }
-
-    // public componentDidMount(): void {
-    //     this.setState({
-    //         gWidth: 
-    //     });
-    // }
 
     public render(): JSX.Element {
         return (
-            <Page idName='alg-graph-view'>
-                <Canvas width={0} height={0} rref={this.canvasRef} />
-                <Toolbar width={this.getWidth()} height={this.getHeight()}></Toolbar>
-            </Page>
+            <div className='alg-graph-container'>
+                <div className='alg-toolbar-container'>
+                    <Toolbar width={this.state.width} height={this.state.height} fieldNum={this.state.mathFields} onChange={this.handleFieldChange} />
+                    <Button onClick={this.handleToolbarButtonClick}>+</Button>
+                </div>
+                <div className='alg-canvas-container' ref={this.canvasContainerRef}>
+                    <Canvas
+                         width={this.state.width}
+                        height={this.state.height}
+                          rref={this.canvasRef}
+                    />
+                </div>
+            </div>
         );
+    }
+
+    private handleContainerResize(): void {
+        this.setWidthHeight();
+    }
+
+    private handleFieldChange(latex: string): void {
+        console.log('math');
+    }
+
+    private handleToolbarButtonClick(ev: React.MouseEvent): void {
+        this.setState({
+            mathFields: this.state.mathFields + 1
+        });
     }
 }
 
