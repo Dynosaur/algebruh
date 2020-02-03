@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import Page   from '../../components/Page';
 
-import './HomePage.scss';
+import './HomePage';
 
 class HomePage extends Component {
     render() {
