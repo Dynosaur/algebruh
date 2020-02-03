@@ -1,6 +1,22 @@
 .alg-toolbar
     display: block
-    position: absolute
-    bottom: 0
+    box-sizing: border-box
     width: 100%
-    border-top: 1px solid gray
+    padding: 10px
+
+    .alg-math-field
+        display: block
+        width: 100%
+        min-width: 100px
+        margin: 10px 0 10px 0
+        box-sizing: border-box
+
+        &:first-child
+            margin-top: 0
+
+        &:last-child
+            margin-bottom: 0
+
+        .mq-root-block
+            padding: 5px
+            font-size: 24px
