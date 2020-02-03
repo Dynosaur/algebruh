@@ -1,12 +1,12 @@
 {
     "compilerOptions": {
         "target": "es5",
-        "lib": [
-            "es6",
-            "dom"
-        ],
-        "sourceMap": true,
+        "lib": ["es6", "dom"],
         "outDir": "./typescript",
+        //"noImplicitAny": true,
+        "noImplicitThis": true,
+        //"strictNullChecks": true,
+        "sourceMap": true,
         "allowJs": true,
         "jsx":"react"
     },
