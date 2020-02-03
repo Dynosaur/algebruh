@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import Navbar from '../../components/Navbar';
 
-import './SignInPage.scss';
+import './SignInPage';
 
 class SignInPage extends Component {
 

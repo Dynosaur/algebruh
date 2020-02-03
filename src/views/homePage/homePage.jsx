@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import Page   from '../../components/Page';
 
-import './HomePage';
+import './home-style';
 
 class HomePage extends Component {
     render() {
