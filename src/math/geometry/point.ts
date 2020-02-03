@@ -26,6 +26,10 @@ class Point {
     public add(point: Point): Point {
         return this.translate(point.x, point.y);
     }
+
+    public toString(): string {
+        return '(' + this.x + ', ' + this.y + ')';
+    }
 }
 
 export const getCenter = function(width: number, height: number) {
