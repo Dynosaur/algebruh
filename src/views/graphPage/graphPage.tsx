@@ -5,6 +5,7 @@ import Canvas  from '../../components/canvas';
 import Toolbar from '../../components/toolbar';
 
 import './graph-page-style';
+import Point from '../../math/geometry/point';
 
 interface GraphProps {}
 
@@ -12,6 +13,11 @@ interface GraphState {
     width: number;
     height: number;
     mathFields: number;
+    offset: Point;
+    Xmin: number;
+    Xmax: number;
+    Ymin: number;
+    Ymax: number;
 }
 
 class GraphPage extends React.Component<GraphProps, GraphState> {
@@ -26,11 +32,18 @@ class GraphPage extends React.Component<GraphProps, GraphState> {
         this.state = {
             width: 0,
             height: 0,
-            mathFields: 1
+            mathFields: 1,
+            offset: new Point(0, 0),
+            Xmin: -10,
+            Xmax: 10,
+            Ymin: -10,
+            Ymax: 10
         };
 
         this.handleContainerResize = this.handleContainerResize.bind(this);
         this.handleToolbarButtonClick = this.handleToolbarButtonClick.bind(this);
+        this.handleMouseDrag = this.handleMouseDrag.bind(this);
+        this.handleScroll = this.handleScroll.bind(this);
     }
 
     private setWidthHeight(): void {
@@ -66,6 +79,13 @@ class GraphPage extends React.Component<GraphProps, GraphState> {
                          width={this.state.width}
                         height={this.state.height}
                           rref={this.canvasRef}
+                          onMouseDrag={this.handleMouseDrag}
+                          offset={this.state.offset}
+                          onScroll={this.handleScroll}
+                          Xmin={this.state.Xmin}
+                          Xmax={this.state.Xmax}
+                          Ymin={this.state.Ymin}
+                          Ymax={this.state.Ymax}
                     />
                 </div>
             </div>
@@ -84,6 +104,30 @@ class GraphPage extends React.Component<GraphProps, GraphState> {
         this.setState({
             mathFields: this.state.mathFields + 1
         });
+    }
+
+    private handleMouseDrag(ev: MouseEvent): void {
+        this.setState({
+            offset: new Point(this.state.offset.getX() + ev.movementX, this.state.offset.getY() + ev.movementY)
+        });
+    }
+
+    private handleScroll(deltaY: number): void {
+        if (deltaY < 0) {
+            this.setState({
+                Xmin: this.state.Xmin / 2,
+                Xmax: this.state.Xmax / 2,
+                Ymin: this.state.Ymin / 2,
+                Ymax: this.state.Ymax / 2
+            });
+        } else {
+            this.setState({
+                Xmin: this.state.Xmin + 1,
+                Xmax: this.state.Xmax + 1,
+                Ymin: this.state.Ymin + 1,
+                Ymax: this.state.Ymax + 1
+            });
+        }
     }
 }
 
