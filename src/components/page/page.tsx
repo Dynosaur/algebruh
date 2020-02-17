@@ -1,26 +1,22 @@
-import React, {Component} from 'react';
-
+import React, { FC } from 'react';
+import classnames from 'classnames';
 import Navbar from '../Navbar';
+import './page-style';
 
-import './Page.scss';
+interface PageProps {
+    navbar?: boolean;
+    pageClass?: string;
+}
 
-class Page extends Component {
-
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
+const Page: FC<PageProps> = (props) => {
+    const smartClassName = classnames('alg-page', props.pageClass);
+    const navbar = (props.navbar) ? <Navbar /> : null;
         return(
-            <div className='alg-page' id={this.props.idName}>
-                {this.props.navbar &&
-                    <Navbar />
-                }
-                {this.props.children}
+            <div className={smartClassName}>
+                {navbar}
+                {props.children}
             </div>
         );
-    }
-
 }
 
 export default Page;
