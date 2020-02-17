@@ -1,15 +1,16 @@
-import * as React from 'react';
-
+import React, { FC } from 'react';
 import './button-style';
 
 interface ButtonProps {
-    children: string;
+    text?: string;
     onClick?: (ev: React.MouseEvent) => void;
 }
 
-const Button = (props: ButtonProps): JSX.Element => {
+const Button: FC<ButtonProps> = (props) => {
     return(
-        <div className='alg-button' onClick={props.onClick}>{props.children}</div>
+        <div className='alg-button' onClick={props.onClick}>
+            {(props.text) ? props.text : '+'}
+        </div>
     );
 }
 
