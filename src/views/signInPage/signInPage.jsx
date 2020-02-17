@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import Navbar from '../../components/Navbar';
 
-import './SignInPage';
+import './signInPage-style';
 
 class SignInPage extends Component {
 
