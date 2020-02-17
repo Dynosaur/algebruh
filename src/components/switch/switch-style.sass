@@ -1,0 +1,22 @@
+$switch-bg: #c0c0c0
+$switch-highlight-bg: #30e030
+
+.alg-switch
+    -webkit-appearance: none
+    outline: none
+    border-radius: 15px
+    width: 50px
+    padding: 2px
+    border-radius: 25px
+    background-color: $switch-bg
+
+    &::-webkit-slider-thumb
+        -webkit-appearance: none
+        width: 25px
+        height: 25px
+        border-radius: 50%
+        background-color: #ffffff
+    
+.enabled
+    transition: background-color 1s
+    background-color: $switch-highlight-bg
