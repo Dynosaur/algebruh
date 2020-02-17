@@ -3,10 +3,10 @@ const express = require('express');
 
 const server = express();
 const port = 80;
-const htmlFile = path.resolve(__dirname, '/dist/index.html');
+const htmlFile = path.resolve(__dirname, './dist/index.html');
 
 server.use(
-    express.static(path.resolve(__dirname + '/dist'))
+    express.static(path.resolve(__dirname, './dist'))
 );
 
 server.get('*', (req, res) => {
@@ -14,4 +14,5 @@ server.get('*', (req, res) => {
 });
 
 server.listen(port);
+console.log('Time: ' + new Date());
 console.log(`Server is listening on port ${port} ...`);
