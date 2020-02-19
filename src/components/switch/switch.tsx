@@ -1,32 +1,27 @@
 import React, { FC, useState } from 'react';
-import classnames from 'classnames';
 import './switch-style';
 
 interface SwitchProps {
-    onEnable?: () => void;
-    onDisable?: () => void;
+    onToggle?: () => void;
 }
 
 const Switch: FC<SwitchProps> = (props) => {
 
-    const [toggled, setDarkMode] = useState(false);
+    const [toggled, setToggle] = useState(false);
 
-    const handleChange = (): void => {
-        setDarkMode(!toggled);
+    const handleClick = (): void => {
+        setToggle(!toggled);
+        if (props.onToggle) {
+            props.onToggle();
+        }
     }
 
-    const inputClass = classnames('alg-switch', {'enabled': toggled});
+    const inputClass = 'alg-switch ' + ((toggled) ? 'enabled' : 'disabled');
 
     return(
-        <input
-            type='range'
-            min='0'
-            max='1'
-            value={+toggled}
-            onChange={() => {}}
-            onClick={handleChange}
-            className={inputClass}
-        />
+        <div className={inputClass} onClick={handleClick}>
+            <div className='alg-switch-thumb' />
+        </div>
     );
 }
 

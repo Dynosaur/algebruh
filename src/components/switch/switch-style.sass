@@ -1,22 +1,31 @@
 $switch-bg: #c0c0c0
-$switch-highlight-bg: #30e030
+$switch-thumb: #ffffff
+$switch-highlight: #00e000
+$trans-time: 0.5s
 
 .alg-switch
-    -webkit-appearance: none
-    outline: none
+    width: 35px
+    padding: 2.25px 2.25px
     border-radius: 15px
-    width: 50px
-    padding: 2px
-    border-radius: 25px
-    background-color: $switch-bg
 
-    &::-webkit-slider-thumb
-        -webkit-appearance: none
-        width: 25px
-        height: 25px
+    .alg-switch-thumb
+        width: 15px
+        height: 15px
         border-radius: 50%
-        background-color: #ffffff
-    
+        background-color: $switch-thumb
+
+.disabled
+    background-color: $switch-bg
+    transition: background-color $trans-time
+
+    .alg-switch-thumb
+        float: left
+        transition: float $trans-time
+
 .enabled
-    transition: background-color 1s
-    background-color: $switch-highlight-bg
+    background-color: $switch-highlight
+    transition: background-color $trans-time
+
+    .alg-switch-thumb
+        float: right
+        transition: float $trans-time
