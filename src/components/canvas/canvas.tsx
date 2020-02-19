@@ -1,65 +1,61 @@
-import * as React from 'react';
-import Line from '../../math/geometry/line';
-
+import React from 'react';
 import './canvas-style';
-import Point from '../../math/geometry/point';
 
-/*
+export interface Coordinate {
+    x: number;
+    y: number;
+}
 
-    TODO:
-        - Doesn't move, implement old code into this class to allow movement
-
-*/
+export interface Line {
+    start: Coordinate;
+    end: Coordinate;
+}
 
 interface CanvasProps {
-    width: number;
-    height: number;
-    rref: React.RefObject<HTMLCanvasElement>;
+    horizontalResolution?: number;
+    verticalResolution?: number;
+    reactRef?: React.RefObject<HTMLCanvasElement>;
+    center?: Coordinate;
+    xRange?: number;
+    yRange?: number;
     lines?: Line[];
-    Xmin?: number;
-    Xmax?: number;
-    Ymin?: number;
-    Ymax?: number;
-    offset?: Point;
-    onMouseDrag?: (ev: MouseEvent) => void;
-    onScroll?: (deltaY: number) => void;
+    onMouseDrag?: (moveX: number, moveY: number) => void;
+    onScroll?: (moveY: number) => void;
 }
 
 class Canvas extends React.Component<CanvasProps> {
 
-    public static defaultProps = {
-        Xmin: -10,
-        Xmax: 10,
-        Ymin: -10,
-        Ymax: 10
+    static defaultProps = {
+        horizontalResolution: 0,
+        verticalResolution: 0,
+        reactRef: React.createRef<HTMLCanvasElement>(),
+        center: {x: 0, y: 0},
+        xRange: 10,
+        yRange: 10
     }
 
-    private tL: Point;
-    private tR: Point;
-    private bL: Point;
-    private bR: Point;
-    private center: Point;
-    private Xscale: number;
-    private Yscale: number;
+    private xMin: number;
+    private xMax: number;
+    private yMin: number;
+    private yMax: number;
 
     constructor(props: CanvasProps) {
         super(props);
-        this.handleMouseDown = this.handleMouseDown.bind(this);
-        this.handleMouseUp = this.handleMouseUp.bind(this);
+        this.startMouseDragListen = this.startMouseDragListen.bind(this);
+        this.stopMouseDragListen   = this.stopMouseDragListen  .bind(this);
         this.handleMouseDrag = this.handleMouseDrag.bind(this);
-        this.handleScroll = this.handleScroll.bind(this);
+        this.handleScroll    = this.handleScroll   .bind(this);
     }
 
     public render(): JSX.Element {
-        this.adjust();
         return(
             <canvas
                 className='alg-canvas'
-                ref={this.props.rref}
-                width={this.props.width}
-                height={this.props.height}
-                onMouseDown={(this.props.onMouseDrag) ? this.handleMouseDown : null}
-                onMouseUp={(this.props.onMouseDrag) ? this.handleMouseUp : null}
+                ref={this.props.reactRef}
+                width={this.props.horizontalResolution}
+                height={this.props.verticalResolution}
+                onMouseDown={(this.props.onMouseDrag) ? this.startMouseDragListen : null}
+                onMouseUp={(this.props.onMouseDrag) ? this.stopMouseDragListen : null}
                 onWheel={(this.props.onScroll) ? this.handleScroll : null}>
             </canvas>
         );
@@ -69,89 +65,50 @@ class Canvas extends React.Component<CanvasProps> {
         this.draw();
     }
 
-    private handleMouseDown(): void {
-        this.props.rref.current.addEventListener('mousemove', this.handleMouseDrag);
+    private startMouseDragListen(): void {
+        this.props.reactRef.current.addEventListener('mousemove', this.handleMouseDrag);
     }
 
-    private handleMouseUp(): void {
-        this.props.rref.current.removeEventListener('mousemove', this.handleMouseDrag);
+    private stopMouseDragListen(): void {
+        this.props.reactRef.current.removeEventListener('mousemove', this.handleMouseDrag);
     }
 
     private handleMouseDrag(ev: MouseEvent): void {
-        this.props.onMouseDrag(ev);
+        this.props.onMouseDrag(ev.movementX, ev.movementY);
     }
 
     private handleScroll(ev: React.WheelEvent): void {
         this.props.onScroll(ev.deltaY);
     }
 
-    private adjust(): void {
-        this.Xscale = this.props.width / (Math.abs(this.props.Xmin) + Math.abs(this.props.Xmax));
-        this.Yscale = this.props.height / (Math.abs(this.props.Ymin) + Math.abs(this.props.Ymax));
-        this.tL = new Point(0, 0);
-        this.tR = new Point(this.props.width, 0);
-        this.bL = new Point(0, this.props.height);
-        this.bR = new Point(this.props.width, this.props.height);
-        this.center = new Point(this.props.width / 2, this.props.height / 2);
-    }
-
-    private point(x: number, y: number): Point {
-        return new Point(
-            this.center.getX() + this.props.offset.getX() + x,
-            this.center.getY() + this.props.offset.getY() - y
-        );
-    }
-
-    private drawLine(line: Line, style?: string, width?: number): void {
-        const context = this.props.rref.current.getContext('2d');
-        context.strokeStyle = (style) ? style : '#000000';
-        context.lineWidth = (width) ? width : 1;
-        context.beginPath();
-        context.moveTo(line.getStart().getX(), line.getStart().getY());
-        context.lineTo(line.getEnd().getX(), line.getEnd().getY());
-        context.stroke();
-    }
-
     private clear(): void {
-        this.props.rref.current.getContext('2d').clearRect(0, 0, this.props.width, this.props.height);
+        const context = this.props.reactRef.current.getContext('2d');
+        context.clearRect(0, 0, this.props.horizontalResolution, this.props.verticalResolution);
+    }
+
+    private convertX(logical: number): number {
+        return (logical - this.xMin) / (this.xMax - this.xMin) * this.props.horizontalResolution;
+    }
+
+    private convertY(logical: number): number {
+        return this.props.verticalResolution - (logical - this.yMin) / (this.yMax - this.yMin) * this.props.verticalResolution;
+    }
+
+    private drawLine(startX: number, startY: number, endX: number, endY: number): void {
+        const context = this.props.reactRef.current.getContext('2d');
+        context.beginPath();
+        context.moveTo(this.convertX(startX), this.convertY(startY));
+        context.lineTo(this.convertX(endX), this.convertY(endY));
+        context.stroke();
     }
 
     private draw(): void {
         this.clear();
-        this.drawGrid();
     }
 
     private drawGrid(): void {
-        for (let i = this.props.Xmin - Math.round(this.props.offset.getX() / this.Xscale); i <= this.props.Xmax - Math.round(this.props.offset.getX() / this.Xscale); i++) {
-            let xPos = i * this.Xscale + this.center.getX() + this.props.offset.getX();
-            this.drawLine(
-                new Line(
-                    new Point(xPos, this.props.height),
-                    new Point(xPos, 0)
-                ), '#a0a0a0'
-            );
-        }
-        for (let i = this.props.Ymin - Math.round(this.props.offset.getY() / this.Yscale); i <= this.props.Ymax - Math.round(this.props.offset.getY() / this.Yscale); i++) {
-            let yPos = i * this.Yscale + this.center.getY() + this.props.offset.getY();
-            this.drawLine(
-                new Line(
-                    new Point(0, yPos),
-                    new Point(this.props.width, yPos)
-                ), '#a0a0a0'
-            );
-        }
-        this.drawLine(
-            new Line(
-                new Point(this.center.getX() + this.props.offset.getX(), this.props.height),
-                new Point(this.center.getX() + this.props.offset.getX(), 0)
-            ), '', 2
-        );
-        this.drawLine(
-            new Line(
-                new Point(0, this.center.getY() + this.props.offset.getY()),
-                new Point(this.props.width, this.center.getY() + this.props.offset.getY())
-            ), '', 2
-        );
+        this.drawLine(0, 0, 0, this.yMax);
+        this.drawLine(0, 0, 0, this.yMin);
     }
 }
 
