@@ -2,7 +2,7 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-    entry: __dirname + "/src/index.jsx",
+    entry: __dirname + "/src/index.tsx",
     module: {
         rules: [
           {
@@ -71,5 +71,6 @@ module.exports = {
         filename: "bundle.js",
         publicPath: "/"
     },
-    devtool: "source-map"
+    devtool: "source-map",
+    stats: 'errors-warnings'
 };
