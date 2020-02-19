@@ -1,5 +1,4 @@
-import React, { createRef, KeyboardEvent, SFC, useEffect, RefObject, useRef, useState } from 'react';
-import { useKeyPress } from '../../util/events';
+import React, { createRef, SFC, useEffect, useState } from 'react';
 import './mathfield-style';
 
 interface MathFieldProps { }
