@@ -5,6 +5,7 @@ import Switch from '../switch';
 import './navbar-style';
 
 interface NavbarProps {
+    switchInitialState?: boolean;
     onSwitchToggle?: () => void;
 }
 
@@ -15,7 +16,7 @@ const Navbar: FC<NavbarProps> = (props) => {
                 <img className='alg-navbar-logo-img' src={logoImage} />
             </Link>
             <div className='alg-navbar-aux'>
-                <Switch onToggle={props.onSwitchToggle} />
+                <Switch onToggle={props.onSwitchToggle} enabled={props.switchInitialState} />
                 <Link to='/graph' className='alg-navbar-graph-link'>
                     <h6>Graph</h6>
                 </Link>

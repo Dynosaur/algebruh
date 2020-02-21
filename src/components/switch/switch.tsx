@@ -2,12 +2,12 @@ import React, { FC, useState } from 'react';
 import './switch-style';
 
 interface SwitchProps {
+    enabled?: boolean;
     onToggle?: () => void;
 }
 
 const Switch: FC<SwitchProps> = (props) => {
-
-    const [toggled, setToggle] = useState(false);
+    const [toggled, setToggle] = useState((props.enabled) ? props.enabled : false);
 
     const handleClick = (): void => {
         setToggle(!toggled);

@@ -10,9 +10,22 @@ import './global-style';
 interface MainProps {}
 
 const Main: FC<MainProps> = () => {
-    const [darkMode, setDarkMode] = useState(false);
+
+    let initialDarkMode = false;
+    const localStorageMode = localStorage.getItem('dark-mode');
+    if (localStorageMode) {
+        if (localStorageMode === 'true') {
+            initialDarkMode = true;
+        }
+    } else {
+        localStorage.setItem('dark-mode', 'false');
+    }
+
+    const [darkMode, setDarkMode] = useState(initialDarkMode);
+
     const toggleDarkMode = () => {
         setDarkMode(!darkMode);
+        localStorage.setItem('dark-mode', (!darkMode).toString());
     }
 
     const home = <HomePage dark={darkMode} onNavbarSwitchToggle={toggleDarkMode} />

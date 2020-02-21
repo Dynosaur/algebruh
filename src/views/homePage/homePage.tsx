@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
+import Navbar from '../../components/navbar';
 import Page from '../../components/page';
 import './home-style';
 
@@ -9,11 +10,14 @@ interface HomePageProps {
 }
 
 const HomePage: FC<HomePageProps> = (props) => {
-    const passedClass = (props.dark) ? 'alg-home dark-mode' : 'alg-home';
+    const classNamePage = (props.dark) ? 'alg-home dark-mode' : 'alg-home';
+    const classNameButton = (props.dark) ? 'alg-home-graph-link dark-mode' : 'alg-home-graph-link';
+
     return (
-        <Page navbar pageClass={passedClass} onNavbarSwitchToggle={props.onNavbarSwitchToggle}>
+        <Page className={classNamePage}>
+            <Navbar onSwitchToggle={props.onNavbarSwitchToggle} switchInitialState={props.dark} />
             <h2 className='alg-home-view-title'>Algebra made easy.</h2>
-            <Link to='/graph' className='alg-home-graph-link'>
+            <Link to='/graph' className={classNameButton}>
                 <h3>Start Graphing</h3>
             </Link>
         </Page>
