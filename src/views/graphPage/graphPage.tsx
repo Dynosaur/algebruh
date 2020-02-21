@@ -21,7 +21,7 @@ interface Graph2Props {}
 
 const GraphPage2: React.SFC<Graph2Props> = (props) => {
     return(
-        <Page pageClass='alg-graph-page'>
+        <Page className='alg-graph-page'>
             <Toolbar />
             <Canvas />
         </Page>

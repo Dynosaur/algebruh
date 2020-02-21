@@ -3,20 +3,15 @@ import Navbar from '../Navbar';
 import './page-style';
 
 interface PageProps {
-    navbar?: boolean;
-    pageClass?: string;
-    onNavbarSwitchToggle?: () => void;
+    className?: string;
 }
 
 const Page: FC<PageProps> = (props) => {
-    const smartClassName = (props.pageClass) ? 'alg-page ' + props.pageClass : 'alg-page';
-    const navbar = (props.navbar) ? <Navbar onSwitchToggle={props.onNavbarSwitchToggle} /> : null;
-        return(
-            <div className={smartClassName}>
-                {navbar}
-                {props.children}
-            </div>
-        );
+    return (
+        <div className={(props.className) ? 'alg-page ' + props.className : 'alg-page'}>
+            {props.children}
+        </div>
+    );
 }
 
 export default Page;
