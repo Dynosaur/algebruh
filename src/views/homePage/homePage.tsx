@@ -15,7 +15,7 @@ const HomePage: FC<HomePageProps> = (props) => {
 
     return (
         <Page className={classNamePage}>
-            <Navbar onSwitchToggle={props.onNavbarSwitchToggle} switchInitialState={props.dark} />
+            <Navbar onSwitchToggle={props.onNavbarSwitchToggle} switchInitialState={props.dark} dark={props.dark} />
             <h2 className='alg-home-view-title'>Algebra made easy.</h2>
             <Link to='/graph' className={classNameButton}>
                 <h3>Start Graphing</h3>

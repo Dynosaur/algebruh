@@ -5,13 +5,16 @@ import Switch from '../switch';
 import './navbar-style';
 
 interface NavbarProps {
+    dark: boolean;
     switchInitialState?: boolean;
     onSwitchToggle?: () => void;
 }
 
 const Navbar: FC<NavbarProps> = (props) => {
+    const classNameNavbar = (props.dark) ? 'alg-navbar dark-mode' : 'alg-navbar';
+    
     return (
-        <div className='alg-navbar'>
+        <div className={classNameNavbar}>
             <Link to='/' className='alg-navbar-logo-link'>
                 <img className='alg-navbar-logo-img' src={logoImage} />
             </Link>

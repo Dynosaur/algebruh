@@ -10,19 +10,25 @@
     .alg-home-graph-link
         border: 2px solid black
         border-radius: 50px
-        padding: 10px
+        padding: 15px
         margin: 0 auto 15px auto
         text-align: center
         font-size: 24px
         transition: 0.4s ease
         user-select: none
         background-color: white
+        color: black
+
+        &.dark-mode
+            border-color: #14141b
+            background-color: #5f5f69
+            color: #d7d7d9
 
         &:hover
             text-decoration: underline
-            background-color: red
-            color: white
+            background-color: #ff0000
+            color: #ffffff
             font-size: 30px
 
             &.dark-mode
-                background-color: blue
+                background-color: #5f5f69

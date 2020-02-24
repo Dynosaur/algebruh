@@ -1,31 +1,33 @@
-$switch-bg: #c0c0c0
-$switch-thumb: #ffffff
-$switch-highlight: #00e000
-$trans-time: 0.5s
+$bg-color: #606060
+$on-color: #00e000
+$thmb-color: #ffffff
+$dark-bg-color: #000000
+$time: 0.5s
 
 .alg-switch
     width: 35px
     padding: 2.25px 2.25px
     border-radius: 15px
+    cursor: pointer
+    transition: background-color $time
 
     .alg-switch-thumb
         width: 15px
         height: 15px
         border-radius: 50%
-        background-color: $switch-thumb
+        background-color: $thmb-color
 
 .disabled
-    background-color: $switch-bg
-    transition: background-color $trans-time
+    background-color: $bg-color
+
+    &.dark-mode
+        background-color: $dark-bg-color
 
     .alg-switch-thumb
         float: left
-        transition: float $trans-time
 
 .enabled
-    background-color: $switch-highlight
-    transition: background-color $trans-time
+    background-color: $on-color
 
     .alg-switch-thumb
         float: right
-        transition: float $trans-time
