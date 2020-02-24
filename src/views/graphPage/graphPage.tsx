@@ -6,20 +6,13 @@ import Toolbar from '../../components/toolbar';
 
 import './graph-page-style';
 
+/*
+    HTMLElement.style.width = 50% works!!! Use this later to make a draggable resize!!!
+*/
+
 interface GraphProps {}
 
-interface GraphState {
-    mathFields: number;
-    canvasWidth: number;
-    canvasHeight: number;
-    canvasCenter: Coordinate;
-    canvasXRange: number;
-    canvasYRange: number;
-}
-
-interface Graph2Props {}
-
-const GraphPage2: React.SFC<Graph2Props> = (props) => {
+const GraphPage: React.SFC<GraphProps> = (props) => {
     return(
         <Page className='alg-graph-page'>
             <Toolbar />
@@ -28,4 +21,4 @@ const GraphPage2: React.SFC<Graph2Props> = (props) => {
     );
 }
 
-export default GraphPage2;
+export default GraphPage;
