@@ -19,13 +19,13 @@ const MathField: SFC<MathFieldProps> = (props) => {
         console.log('Blur');
     }
 
-    useEffect(() => {
-        window.addEventListener('resize', () => {
-            console.log(textAreaRef.current);
-            setSVGWidth(textAreaRef.current.clientWidth);
-            setSVGHeight(textAreaRef.current.clientHeight);
-        });
-    });
+    // useEffect(() => {
+    //     window.addEventListener('resize', () => {
+    //         console.log(textAreaRef.current);
+    //         setSVGWidth(textAreaRef.current.clientWidth);
+    //         setSVGHeight(textAreaRef.current.clientHeight);
+    //     });
+    // });
 
     return (
         <div className='alg-mathfield' >

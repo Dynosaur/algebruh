@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { FC, RefObject, useEffect } from 'react';
+import Draw from './draw';
 import './canvas-style';
 
 export interface Coordinate {
@@ -12,32 +13,63 @@ export interface Line {
 }
 
 interface CanvasProps {
-    horizontalResolution?: number;
-    verticalResolution?: number;
-    reactRef?: React.RefObject<HTMLCanvasElement>;
-    center?: Coordinate;
-    xRange?: number;
-    yRange?: number;
-    lines?: Line[];
-    onMouseDrag?: (moveX: number, moveY: number) => void;
-    onScroll?: (moveY: number) => void;
+    width: number;
+    height: number;
+    reactRef: RefObject<HTMLCanvasElement>;
+    onMouseDrag: (moveX: number, moveY: number) => void;
+    onScroll: (moveY: number) => void;
+    xOffset: number;
+    yOffset: number;
 }
 
-class Canvas extends React.Component<CanvasProps> {
+const Canvas2: FC<CanvasProps> = (props) => {
 
-    static defaultProps = {
-        horizontalResolution: 0,
-        verticalResolution: 0,
-        reactRef: React.createRef<HTMLCanvasElement>(),
-        center: {x: 0, y: 0},
-        xRange: 10,
-        yRange: 10
+    const startMouseDragListen = () => {
+        window.addEventListener('mousemove', handleMouseDrag);
     }
 
-    private xMin: number;
-    private xMax: number;
-    private yMin: number;
-    private yMax: number;
+    const stopMouseDragListen = () => {
+        window.removeEventListener('mousemove', handleMouseDrag);
+    }
+
+    const handleMouseDrag = (ev: MouseEvent) => {
+        props.onMouseDrag(ev.movementX, ev.movementY);
+    }
+
+    const handleScroll = (ev: MouseWheelEvent) => {
+        props.onScroll(ev.deltaY);
+    }
+
+    const draw = () => {
+        const draw = new Draw(props.reactRef.current, props.xOffset, props.yOffset);
+        draw.clear();
+        draw.reticle();
+    }
+
+    useEffect(() => {
+        console.log(props.xOffset);
+        // draw();
+    });
+
+    useEffect(() => {
+        const canvasDOM = props.reactRef.current;
+        canvasDOM.addEventListener('mousedown', startMouseDragListen);
+        window.addEventListener('mouseup', stopMouseDragListen);
+        canvasDOM.addEventListener('wheel', handleScroll);
+        return () => {
+            canvasDOM.removeEventListener('mousedown', startMouseDragListen);
+            window.removeEventListener('mouseup', stopMouseDragListen);
+            canvasDOM.removeEventListener('wheel', handleScroll);
+        };
+    }, []);
+
+    return(
+        <canvas className='alg-canvas' width={props.width} height={props.height} ref={props.reactRef} />
+    );
+}
+
+/*
+class Canvas extends React.Component<CanvasProps> {
 
     constructor(props: CanvasProps) {
         super(props);
@@ -63,22 +95,6 @@ class Canvas extends React.Component<CanvasProps> {
 
     public componentDidUpdate(): void {
         this.draw();
-    }
-
-    private startMouseDragListen(): void {
-        this.props.reactRef.current.addEventListener('mousemove', this.handleMouseDrag);
-    }
-
-    private stopMouseDragListen(): void {
-        this.props.reactRef.current.removeEventListener('mousemove', this.handleMouseDrag);
-    }
-
-    private handleMouseDrag(ev: MouseEvent): void {
-        this.props.onMouseDrag(ev.movementX, ev.movementY);
-    }
-
-    private handleScroll(ev: React.WheelEvent): void {
-        this.props.onScroll(ev.deltaY);
     }
 
     private clear(): void {
@@ -111,5 +127,6 @@ class Canvas extends React.Component<CanvasProps> {
         this.drawLine(0, 0, 0, this.yMin);
     }
 }
+*/
 
-export default Canvas;
+export default Canvas2;
