@@ -19,22 +19,28 @@ interface CanvasProps {
 const Canvas: FC<CanvasProps> = (props) => {
     const canvas = useRef(null);
 
-    const [dimension, setDimension] = useState(
-        { width: 0, height: 0 }
-    );
+    const [dimension, setDimension] = useState({
+        width: 0,
+        height: 0
+    });
 
-    const [offset, setOffset] = useState(
-        { x: 0, y: 0 }
-    );
+    const [offset, setOffset] = useState({
+        x: 0,
+        y: 0
+    });
+
+    const [zoom, setZoom] = useState(0);
 
     const offsetRef = useRef(offset);
+    const zoomRef = useRef(zoom);
 
     useEffect(() => {
         const handleWindowResize = () => {
             const canvasDOM: HTMLCanvasElement = canvas.current;
-            setDimension(
-                { width: canvasDOM.clientWidth, height: canvasDOM.clientHeight }
-            );
+            setDimension({
+                width: canvasDOM.clientWidth,
+                height: canvasDOM.clientHeight
+            });
         }
         window.addEventListener('resize', handleWindowResize);
         handleWindowResize();
@@ -49,14 +55,16 @@ const Canvas: FC<CanvasProps> = (props) => {
     }, [offset]);
 
     useEffect(() => {
+        zoomRef.current = zoom;
+    }, [zoom]);
+
+    useEffect(() => {
         const canvasDOM: HTMLCanvasElement = canvas.current;
         const handleMouseDrag = (event: MouseEvent) => {
-            setOffset(
-            {
+            setOffset({
                 x: offsetRef.current.x + event.movementX,
                 y: offsetRef.current.y + event.movementY
-            }
-            );
+            });
         }
         const handleMouseUp = () => {
             window.removeEventListener('mousemove', handleMouseDrag);
@@ -71,11 +79,16 @@ const Canvas: FC<CanvasProps> = (props) => {
         const draw = new Draw(canvasDOM, offset.x, offset.y);
         draw.clear();
         draw.reticle();
+        draw.grid();
 
         return () => {
             canvasDOM.removeEventListener('mousedown', handleMouseDown);
         };
     }, [dimension, offset]);
+
+    useEffect(() => {
+        
+    }, [zoom]);
 
     return(
         <canvas

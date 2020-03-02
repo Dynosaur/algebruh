@@ -34,6 +34,20 @@ class Draw {
         this.horizontalLine(this.height / 2 + this.yOffset);
         this.verticalLine(this.width / 2 + this.xOffset);
     }
+
+    public grid(): void {
+        const xDiff = this.width / 2 - this.xOffset;
+        if (xDiff > this.width) {
+            console.log('left');
+        } else {
+            if (xDiff < 0) {
+                console.log('right');
+            } else {
+                console.log('visible');
+            }
+        }
+    }
+
 }
 
 export default Draw;
