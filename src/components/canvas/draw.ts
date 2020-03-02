@@ -8,7 +8,7 @@ class Draw {
         this.context = canvas.getContext('2d');
         this.width = canvas.width;
         this.height = canvas.height;
-        console.log(xOffset);
+        //console.log(canvas.width);
     }
 
     public clear() {
@@ -31,16 +31,8 @@ class Draw {
     }
 
     public reticle(): void {
-        if (true) {
-            this.horizontalLine(this.height / 2 + this.yOffset);
-        } else {
-            console.log('dont draw hori');
-        }
-        if (true) {
-            this.verticalLine(this.width / 2 + this.xOffset);
-        } else {
-            console.log('dont draw verti');
-        }
+        this.horizontalLine(this.height / 2 + this.yOffset);
+        this.verticalLine(this.width / 2 + this.xOffset);
     }
 }
 
