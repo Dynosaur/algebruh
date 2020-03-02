@@ -1,4 +1,4 @@
-import React, { FC, RefObject, useEffect } from 'react';
+import React, { FC, RefObject, useEffect, useRef, useState, WheelEvent } from 'react';
 import Draw from './draw';
 import './canvas-style';
 
@@ -13,120 +13,77 @@ export interface Line {
 }
 
 interface CanvasProps {
-    width: number;
-    height: number;
-    reactRef: RefObject<HTMLCanvasElement>;
-    onMouseDrag: (moveX: number, moveY: number) => void;
-    onScroll: (moveY: number) => void;
-    xOffset: number;
-    yOffset: number;
+    dark: boolean;
 }
 
-const Canvas2: FC<CanvasProps> = (props) => {
+const Canvas: FC<CanvasProps> = (props) => {
+    const canvas = useRef(null);
 
-    const startMouseDragListen = () => {
-        window.addEventListener('mousemove', handleMouseDrag);
-    }
+    const [dimension, setDimension] = useState(
+        { width: 0, height: 0 }
+    );
 
-    const stopMouseDragListen = () => {
-        window.removeEventListener('mousemove', handleMouseDrag);
-    }
+    const [offset, setOffset] = useState(
+        { x: 0, y: 0 }
+    );
 
-    const handleMouseDrag = (ev: MouseEvent) => {
-        props.onMouseDrag(ev.movementX, ev.movementY);
-    }
-
-    const handleScroll = (ev: MouseWheelEvent) => {
-        props.onScroll(ev.deltaY);
-    }
-
-    const draw = () => {
-        const draw = new Draw(props.reactRef.current, props.xOffset, props.yOffset);
-        draw.clear();
-        draw.reticle();
-    }
+    const offsetRef = useRef(offset);
 
     useEffect(() => {
-        console.log(props.xOffset);
-        // draw();
-    });
+        const handleWindowResize = () => {
+            const canvasDOM: HTMLCanvasElement = canvas.current;
+            setDimension(
+                { width: canvasDOM.clientWidth, height: canvasDOM.clientHeight }
+            );
+        }
+        window.addEventListener('resize', handleWindowResize);
+        handleWindowResize();
 
-    useEffect(() => {
-        const canvasDOM = props.reactRef.current;
-        canvasDOM.addEventListener('mousedown', startMouseDragListen);
-        window.addEventListener('mouseup', stopMouseDragListen);
-        canvasDOM.addEventListener('wheel', handleScroll);
         return () => {
-            canvasDOM.removeEventListener('mousedown', startMouseDragListen);
-            window.removeEventListener('mouseup', stopMouseDragListen);
-            canvasDOM.removeEventListener('wheel', handleScroll);
-        };
+            window.removeEventListener('resize', handleWindowResize);
+        }
     }, []);
 
+    useEffect(() => {
+        offsetRef.current = offset;
+    }, [offset]);
+
+    useEffect(() => {
+        const canvasDOM: HTMLCanvasElement = canvas.current;
+        const handleMouseDrag = (event: MouseEvent) => {
+            setOffset(
+            {
+                x: offsetRef.current.x + event.movementX,
+                y: offsetRef.current.y + event.movementY
+            }
+            );
+        }
+        const handleMouseUp = () => {
+            window.removeEventListener('mousemove', handleMouseDrag);
+            window.removeEventListener('mouseup', handleMouseUp);
+        }
+        const handleMouseDown = () => {
+            window.addEventListener('mousemove', handleMouseDrag);
+            window.addEventListener('mouseup', handleMouseUp);
+        }
+        canvasDOM.addEventListener('mousedown', handleMouseDown);
+
+        const draw = new Draw(canvasDOM, offset.x, offset.y);
+        draw.clear();
+        draw.reticle();
+
+        return () => {
+            canvasDOM.removeEventListener('mousedown', handleMouseDown);
+        };
+    }, [dimension, offset]);
+
     return(
-        <canvas className='alg-canvas' width={props.width} height={props.height} ref={props.reactRef} />
+        <canvas
+            className={(props.dark) ? 'alg-canvas dark-mode' : 'alg-canvas'}
+            width={dimension.width}
+            height={dimension.height}
+            ref={canvas} />
     );
 }
 
-/*
-class Canvas extends React.Component<CanvasProps> {
-
-    constructor(props: CanvasProps) {
-        super(props);
-        this.startMouseDragListen = this.startMouseDragListen.bind(this);
-        this.stopMouseDragListen   = this.stopMouseDragListen  .bind(this);
-        this.handleMouseDrag = this.handleMouseDrag.bind(this);
-        this.handleScroll    = this.handleScroll   .bind(this);
-    }
-
-    public render(): JSX.Element {
-        return(
-            <canvas
-                className='alg-canvas'
-                ref={this.props.reactRef}
-                width={this.props.horizontalResolution}
-                height={this.props.verticalResolution}
-                onMouseDown={(this.props.onMouseDrag) ? this.startMouseDragListen : null}
-                onMouseUp={(this.props.onMouseDrag) ? this.stopMouseDragListen : null}
-                onWheel={(this.props.onScroll) ? this.handleScroll : null}>
-            </canvas>
-        );
-    }
-
-    public componentDidUpdate(): void {
-        this.draw();
-    }
-
-    private clear(): void {
-        const context = this.props.reactRef.current.getContext('2d');
-        context.clearRect(0, 0, this.props.horizontalResolution, this.props.verticalResolution);
-    }
-
-    private convertX(logical: number): number {
-        return (logical - this.xMin) / (this.xMax - this.xMin) * this.props.horizontalResolution;
-    }
-
-    private convertY(logical: number): number {
-        return this.props.verticalResolution - (logical - this.yMin) / (this.yMax - this.yMin) * this.props.verticalResolution;
-    }
-
-    private drawLine(startX: number, startY: number, endX: number, endY: number): void {
-        const context = this.props.reactRef.current.getContext('2d');
-        context.beginPath();
-        context.moveTo(this.convertX(startX), this.convertY(startY));
-        context.lineTo(this.convertX(endX), this.convertY(endY));
-        context.stroke();
-    }
-
-    private draw(): void {
-        this.clear();
-    }
-
-    private drawGrid(): void {
-        this.drawLine(0, 0, 0, this.yMax);
-        this.drawLine(0, 0, 0, this.yMin);
-    }
-}
-*/
-
-export default Canvas2;
+export default Canvas;
