@@ -43,7 +43,7 @@ const Main: FC<MainProps> = () => {
                     <SignInPage />
                 </Route>
                 <Route exact path='/graph'>
-                    <GraphPage />
+                    <GraphPage dark={darkMode} />
                 </Route>
                 <Route>
                     <NotFoundPage />

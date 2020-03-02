@@ -3,7 +3,9 @@ import Button from '../button';
 import MathField from '../mathfield';
 import './toolbar-style';
 
-interface ToolbarProps {}
+interface ToolbarProps {
+    dark: boolean;
+}
 
 const Toolbar: FC<ToolbarProps> = (props) => {
     const [quant, setQuant] = useState(1);
@@ -19,7 +21,7 @@ const Toolbar: FC<ToolbarProps> = (props) => {
     );
 
     return(
-        <div className='alg-toolbar'>
+        <div className={(props.dark) ? 'alg-toolbar dark-mode' : 'alg-toolbar'}>
             {mathFields}
             <Button onClick={() => setQuant(quant + 1)} />
         </div>
