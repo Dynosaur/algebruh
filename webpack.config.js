@@ -1,76 +1,45 @@
-const isDevelopment = process.env.NODE_ENV === 'development';
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require('path');
+const miniCSS = require('mini-css-extract-plugin');
+
+const srcDir = path.resolve(__dirname, './src');
 
 module.exports = {
-    entry: __dirname + "/src/index.tsx",
-    module: {
-        rules: [
-          {
-            test: /\.(js|jsx)$/,
-            exclude: /node_modules/,
-            use: {
-              loader: "babel-loader"
-            }
-          },
-          {
-            test: /\.module\.s(a|c)ss$/,
-            loader: [
-              isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader,
-              {
-                loader: 'css-loader',
-                options: {
-                  modules: true,
-                  sourceMap: isDevelopment
-                }
-              },
-              {
-                loader: 'sass-loader',
-                options: {
-                  sourceMap: isDevelopment
-                }
-              }
-            ]
-          }, {
-            test: /\.s(a|c)ss$/,
-            exclude: /\.module.(s(a|c)ss)$/,
-            loader: [
-              isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader,
-              'css-loader',
-              {
-                loader: 'sass-loader',
-                options: {
-                  sourceMap: isDevelopment
-                }
-              }
-            ]
-          },
-          {
-            test: /\.(png|svg|jpg|gif)$/,
-            use: [
-              'file-loader',
-            ]
-          },
-          {
-            test: /\.tsx?$/,
-            use: 'ts-loader',
-            exclude: /node_modules/,
-          },
-        ],
-    },
-    resolve: {
-        extensions: ['.js', '.jsx', '.scss', '.sass', 'css', '.ts', '.tsx']
-    },
-    plugins: [
-      new MiniCssExtractPlugin({
-        filename: 'index.css',
-        chunkFilename: 'index.css'
-      })
+  mode: 'development',
+  entry: path.resolve(__dirname, './src/index.tsx'),
+  output: {
+    path: path.resolve(__dirname, './dist'),
+    filename: 'bundle.js'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(jsx?)$/,
+        include: srcDir,
+        loader: 'babel-loader'
+      },
+      {
+        test: /\.s(a|c)ss$/,
+        include: srcDir,
+        use: [miniCSS.loader, 'css-loader', 'sass-loader']
+      },
+      {
+        test: /\.(png|svg|jpg|gif)$/,
+        include: srcDir,
+        loader: 'file-loader'
+      },
+      {
+        test: /\.tsx?$/,
+        include: srcDir,
+        loader: 'ts-loader',
+      },
     ],
-    output: {
-        path: __dirname + '/dist',
-        filename: "bundle.js",
-        publicPath: "/"
-    },
-    devtool: "source-map",
-    stats: 'errors-warnings'
+  },
+  resolve: {
+    extensions: ['.js', '.jsx', '.css', '.scss', '.sass', '.ts', '.tsx']
+  },
+  plugins: [new miniCSS(
+      { filename: 'index.css', chunkFilename: 'index.css' }
+  )],
+  devtool: "source-map",
+  stats: 'errors-warnings'
 };
