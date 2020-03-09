@@ -1,4 +1,4 @@
 {
     "ext": "js,json,jsx,html,css,scss,sass,ts,tsx",
-    "ignore": ["node_modules", "dist"]
+    "ignore": ["node_modules", "dist", "package-lock.json", "package.json"]
 }

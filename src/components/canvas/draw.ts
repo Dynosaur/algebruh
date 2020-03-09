@@ -1,17 +1,23 @@
+interface Order {
+    draw: () => void;
+}
+
 class Draw {
 
     private context: CanvasRenderingContext2D;
     private width: number;
     private height: number;
+    private fontSize: number;
+    private orders: Order[];
+    private priorityOrders: Order[];
 
     constructor(canvas: HTMLCanvasElement, private xOffset: number, private yOffset: number, private zoom: number) {
         this.context = canvas.getContext('2d');
         this.context.font = '16px Arial';
         this.width = canvas.width;
         this.height = canvas.height;
-    }
+        this.fontSize = 16;
 
-    public clear() {
         this.context.clearRect(0, 0, this.width, this.height);
     }
 
@@ -39,26 +45,33 @@ class Draw {
         this.verticalLine(this.width / 2 + this.xOffset, '#aaaaaa');
     }
 
+    /*
     public drawString(x: number, y: number, text: string, fontSize?: number, font?: string): void {
         if (!fontSize) {
             fontSize = 16;
+        } else {
+            this.fontSize = fontSize;
         }
         if (!font) {
             font = 'Arial';
         }
-        this.context.font = fontSize + 'px ' + font;
-        this.context.fillText(text, x, y);
+        this.priorityOrders.push({
+            draw: () => { 
+                this.context.font = fontSize + 'px ' + font;
+                this.context.fillText(text, x, y);
+            }
+        });
     }
+    */
 
     public verticalGridLine(x: number, num: string): void {
         this.verticalLine(x);
-        const textXOffset = this.context.measureText(num).width / 2;
-        const textYOffset = parseInt(/^(\d+)px [\w\-]+$/.exec(this.context.font)[1]);
-        this.drawString(x -textXOffset, this.height / 2 + this.yOffset + textYOffset, num);
+        // const textXOffset = this.context.measureText(num).width / 2;
+        // this.drawString(x -textXOffset, this.height / 2 + this.yOffset + this.fontSize, num);
     }
 
     public grid(): void {
-        // console.log(this.zoom);
+        /*
         let xSpace = this.width / 2 / this.zoom;
         const offset = this.width / 2 + this.xOffset;
         const leftLines = Math.floor(offset / xSpace);
@@ -84,6 +97,8 @@ class Draw {
                 this.verticalLine(x);
             }
         }
+        */
+        this.reticle();
     }
 
 }

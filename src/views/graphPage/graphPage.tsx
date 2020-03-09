@@ -1,6 +1,5 @@
 import React, { createRef, FC, useEffect, useRef, useState } from 'react';
 import Canvas  from '../../components/canvas';
-import { Coordinate } from '../../components/canvas/canvas';
 import Page    from '../../components/page';
 import Toolbar from '../../components/toolbar';
 

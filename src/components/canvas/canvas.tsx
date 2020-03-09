@@ -2,16 +2,6 @@ import React, { FC, RefObject, useEffect, useRef, useState, WheelEvent } from 'r
 import Draw from './draw';
 import './canvas-style';
 
-export interface Coordinate {
-    x: number;
-    y: number;
-}
-
-export interface Line {
-    start: Coordinate;
-    end: Coordinate;
-}
-
 interface CanvasProps {
     dark: boolean;
 }
@@ -19,19 +9,12 @@ interface CanvasProps {
 const Canvas: FC<CanvasProps> = (props) => {
     const canvas = useRef(null);
 
-    const [dimension, setDimension] = useState({
-        width: 0,
-        height: 0
-    });
+    const [dimension, setDimension] = useState({ width: 0, height: 0 });
 
-    const [offset, setOffset] = useState({
-        x: 0,
-        y: 0
-    });
+    const [offset, setOffset] = useState({ x: 0, y: 0 });
+    const offsetRef = useRef(offset);
 
     const [zoom, setZoom] = useState(5);
-
-    const offsetRef = useRef(offset);
     const zoomRef = useRef(zoom);
 
     useEffect(() => {
@@ -94,10 +77,9 @@ const Canvas: FC<CanvasProps> = (props) => {
         }
         canvasDOM.addEventListener('mousedown', handleMouseDown);
 
-        const draw = new Draw(canvasDOM, offset.x, offset.y, zoomRef.current);
-        draw.clear();
+        const draw = new Draw(canvas.current, offset.x, offset.y, zoom);
         draw.grid();
-        draw.reticle();
+        //draw.draw();
 
         return () => {
             canvasDOM.removeEventListener('mousedown', handleMouseDown);
