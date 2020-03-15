@@ -1,4 +1,4 @@
-import React, { FC, RefObject, useEffect, useRef, useState, WheelEvent } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import Draw from './draw';
 import './canvas-style';
 
@@ -30,7 +30,6 @@ const Canvas: FC<CanvasProps> = (props) => {
         handleWindowResize();
 
         const handleWheel = (event: MouseWheelEvent) => {
-            console.log(event.offsetX);
             if (event.deltaY > 0) {
                 setZoom(zoomRef.current + 1);
                 setOffset(
@@ -43,7 +42,7 @@ const Canvas: FC<CanvasProps> = (props) => {
                 );
             }
         }
-        canvasDOM.addEventListener('wheel', handleWheel);
+        canvasDOM.addEventListener('wheel', handleWheel, { passive: true });
 
         return () => {
             window.removeEventListener('resize', handleWindowResize);
