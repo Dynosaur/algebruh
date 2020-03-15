@@ -20,12 +20,12 @@ const Canvas: FC<CanvasProps> = (props) => {
     useEffect(() => {
         const canvasDOM: HTMLCanvasElement = canvas.current;
         const handleWindowResize = () => {
-            const size = canvas.current.getBoundingClientRect();
+            const size = canvasDOM.getBoundingClientRect();
             setDimension({
                 width: size.width,
                 height: size.height
             });
-        }
+        };
         window.addEventListener('resize', handleWindowResize);
         handleWindowResize();
 
@@ -62,8 +62,8 @@ const Canvas: FC<CanvasProps> = (props) => {
         const canvasDOM: HTMLCanvasElement = canvas.current;
         const handleMouseDrag = (event: MouseEvent) => {
             setOffset({
-                x: offsetRef.current.x + event.movementX,
-                y: offsetRef.current.y + event.movementY
+                x: offsetRef.current.x + (event.movementX * 1 / window.devicePixelRatio),
+                y: offsetRef.current.y + (event.movementY * 1 / window.devicePixelRatio)
             });
         }
         const handleMouseUp = () => {
@@ -85,7 +85,7 @@ const Canvas: FC<CanvasProps> = (props) => {
         };
     }, [dimension, offset, zoom]);
 
-    return(
+    return (
         <canvas
             className={(props.dark) ? 'alg-canvas dark-mode' : 'alg-canvas'}
             width={dimension.width}
