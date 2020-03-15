@@ -2,6 +2,18 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import Draw from './draw';
 import './canvas-style';
 
+/*
+
+    ISSUES
+    ------
+
+    1. Strange effect when inspect menu is open:
+        - Mouse movement seems slowed, as if it was not tracking the correct amount of movement
+        - Does not occur when inspect menu is closed (When running application as intended)
+        - Does not occur when window size is changed
+
+*/
+
 interface CanvasProps {
     dark: boolean;
 }
@@ -61,9 +73,11 @@ const Canvas: FC<CanvasProps> = (props) => {
     useEffect(() => {
         const canvasDOM: HTMLCanvasElement = canvas.current;
         const handleMouseDrag = (event: MouseEvent) => {
+            const offsetCurrent = offsetRef.current;
+            const deviceZoomFactor = 1 / window.devicePixelRatio;
             setOffset({
-                x: offsetRef.current.x + (event.movementX * 1 / window.devicePixelRatio),
-                y: offsetRef.current.y + (event.movementY * 1 / window.devicePixelRatio)
+                x: offsetCurrent.x + (event.movementX * deviceZoomFactor),
+                y: offsetCurrent.y + (event.movementY * deviceZoomFactor)
             });
         }
         const handleMouseUp = () => {
@@ -76,7 +90,7 @@ const Canvas: FC<CanvasProps> = (props) => {
         }
         canvasDOM.addEventListener('mousedown', handleMouseDown);
 
-        const draw = new Draw(canvas.current, offset.x, offset.y, zoom);
+        const draw = new Draw(canvasDOM, offset.x, offset.y, zoom);
         draw.grid();
         //draw.draw();
 
