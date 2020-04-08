@@ -1,16 +1,15 @@
 import React, { FC, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import GraphPage    from './views/graphPage';
-import HomePage     from './views/homePage';
+import GraphPage from './views/graphPage';
+import HomePage from './views/homePage';
 import NotFoundPage from './views/NotFoundPage';
-import SignInPage   from './views/signinPage';
+import SignInPage from './views/signinPage';
 import './global-style';
 
-interface MainProps {}
+interface MainProps { }
 
 const Main: FC<MainProps> = () => {
-
     let initialDarkMode = false;
     const localStorageMode = localStorage.getItem('dark-mode');
     if (localStorageMode) {
@@ -26,11 +25,11 @@ const Main: FC<MainProps> = () => {
     const toggleDarkMode = () => {
         setDarkMode(!darkMode);
         localStorage.setItem('dark-mode', (!darkMode).toString());
-    }
+    };
 
     const home = <HomePage dark={darkMode} onNavbarSwitchToggle={toggleDarkMode} />
 
-    return(
+    return (
         <Router>
             <Switch>
                 <Route exact path='/'>
@@ -51,6 +50,6 @@ const Main: FC<MainProps> = () => {
             </Switch>
         </Router>
     );
-}
+};
 
 ReactDOM.render(<Main />, document.getElementById('root'));
