@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FunctionComponent } from 'react';
 import { Link } from 'react-router-dom';
 import logoImage from './logo.png';
 import Switch from '../switch';
@@ -10,16 +10,19 @@ interface NavbarProps {
     onSwitchToggle?: () => void;
 }
 
-const Navbar: FC<NavbarProps> = (props) => {
-    const classNameNavbar = (props.dark) ? 'alg-navbar dark-mode' : 'alg-navbar';
-    
+const Navbar: FunctionComponent<NavbarProps> = (props) => {
+    const classNameNavbar = props.dark ? 'alg-navbar dark-mode' : 'alg-navbar';
+
     return (
         <div className={classNameNavbar}>
             <Link to='/' className='alg-navbar-logo-link'>
                 <img className='alg-navbar-logo-img' src={logoImage} />
             </Link>
             <div className='alg-navbar-aux'>
-                <Switch onToggle={props.onSwitchToggle} enabled={props.switchInitialState} />
+                <Switch
+                    onToggle={props.onSwitchToggle}
+                    enabled={props.switchInitialState}
+                />
                 <Link to='/graph' className='alg-navbar-graph-link'>
                     <h6>Graph</h6>
                 </Link>
@@ -29,6 +32,6 @@ const Navbar: FC<NavbarProps> = (props) => {
             </div>
         </div>
     );
-}
+};
 
 export default Navbar;
