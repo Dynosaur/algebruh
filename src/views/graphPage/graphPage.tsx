@@ -1,8 +1,6 @@
-import React, { createRef, FC, useEffect, useRef, useState } from 'react';
-import Canvas  from '../../components/canvas';
-import Page    from '../../components/page';
-import Toolbar from '../../components/toolbar';
-
+import React, { FunctionComponent, useState } from 'react';
+import Canvas from '../../components/canvas';
+import Page from '../../components/page';
 import './graph-page-style';
 
 /*
@@ -13,14 +11,13 @@ interface GraphProps {
     dark: boolean;
 }
 
-const GraphPage: FC<GraphProps> = (props) => {
-
-    return(
+const GraphPage: FunctionComponent<GraphProps> = (props) => {
+    return (
         <Page className='alg-graph-page'>
-            <Toolbar dark={props.dark} />
+            {/*<Toolbar dark={props.dark} />*/}
             <Canvas dark={props.dark} />
         </Page>
     );
-}
+};
 
 export default GraphPage;

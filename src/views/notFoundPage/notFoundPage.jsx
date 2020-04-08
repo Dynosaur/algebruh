@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 import Page from '../../components/page';
 
@@ -7,7 +7,7 @@ import './notFoundPage-style';
 class NotFoundPage extends Component {
 
     render() {
-        return(
+        return (
             <Page navbar>
                 <div className='alg-not-found-view'>
                     <h1>Sorry!</h1>
