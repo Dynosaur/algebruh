@@ -15,7 +15,7 @@ const GraphPage: FunctionComponent<GraphProps> = (props) => {
     return (
         <Page className='alg-graph-page'>
             {/*<Toolbar dark={props.dark} />*/}
-            <Canvas dark={props.dark} />
+            <Canvas />
         </Page>
     );
 };
