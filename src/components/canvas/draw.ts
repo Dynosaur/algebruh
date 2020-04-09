@@ -2,23 +2,47 @@ interface Order {
     draw: () => void;
 }
 
+interface Point {
+    x: number;
+    y: number;
+}
+
 class Draw {
 
     private context: CanvasRenderingContext2D;
     private width: number;
     private height: number;
     private fontSize: number;
+
+    private offset: Point;
+
     private orders: Order[];
     private priorityOrders: Order[];
 
-    constructor(canvas: HTMLCanvasElement, private xOffset: number, private yOffset: number, private zoom: number) {
+    constructor(canvas: HTMLCanvasElement) {
         this.context = canvas.getContext('2d');
         this.context.font = '16px Arial';
         this.width = canvas.width;
         this.height = canvas.height;
         this.fontSize = 16;
 
+        this.offset = { x: 0, y: 0 };
+
+        this.draw();
+    }
+
+    public clear(): void {
         this.context.clearRect(0, 0, this.width, this.height);
+    }
+
+    public draw(): void {
+        this.clear();
+        this.grid();
+    }
+
+    public translate(x: number, y: number) {
+        this.offset = { x: this.offset.x + x, y: this.offset.y + y };
+        this.draw();
     }
 
     public drawLine(x1: number, y1: number, x2: number, y2: number, color?: string) {
@@ -41,8 +65,8 @@ class Draw {
     }
 
     public reticle(): void {
-        this.horizontalLine(this.height / 2 + this.yOffset, '#aaaaaa');
-        this.verticalLine(this.width / 2 + this.xOffset, '#aaaaaa');
+        this.horizontalLine(this.height / 2 + this.offset.y, '#aaaaaa');
+        this.verticalLine(this.width / 2 + this.offset.x, '#aaaaaa');
     }
 
     /*
